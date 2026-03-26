@@ -5,6 +5,7 @@ namespace SimpleCalculator
         int n1, n2;
         string operation;
         bool afterOperator = false;
+        bool afterEqual = false;
 
         public Form1()
         {
@@ -172,10 +173,9 @@ namespace SimpleCalculator
         // = 버튼 클릭 이벤트 핸들러
         private void equal_Click(object sender, EventArgs e)
         {
-            string[] parts = textBox1.Text.Split(new char[] { '+', '-', '×', '÷' });
-            n2 = int.Parse(parts[1].Trim());
-
+            n2 = int.Parse(textBox2.Text);
             int result = 0;
+
             switch (operation)
             {
                 case "+": result = n1 + n2; break;
@@ -183,14 +183,61 @@ namespace SimpleCalculator
                 case "*": result = n1 * n2; break;
                 case "/":
                     if (n2 != 0) result = n1 / n2;
-                    else MessageBox.Show("0으로 나눌 수 없습니다!");
+                    else
+                    {
+                        MessageBox.Show("0으로 나눌 수 없습니다!");
+                        return;
+                    }
                     break;
             }
 
-                    textBox1.Text = textBox1.Text + " = " + result.ToString();
+            textBox1.Text = n1.ToString() + " " + operation + " " + n2.ToString() + " = " + result.ToString();
+            textBox2.Clear();
+            textBox2.Text = result.ToString();
 
-                    textBox2.Clear();
-                    textBox2.Text = result.ToString();
+            afterEqual = true; // = 버튼 눌린 상태 기록
+
+        }
+
+        // CE 버튼 클릭 이벤트 핸들러
+        private void CE_Click(object sender, EventArgs e)
+        {
+            if (afterEqual) // = 이후라면 전체 초기화
+            {
+                textBox1.Clear();
+                textBox2.Clear();
+                n1 = 0;
+                n2 = 0;
+                operation = string.Empty;
+                afterOperator = false;
+                afterEqual = false;
+            }
+            else
+            {
+                // 일반적인 CE 동작: 현재 입력값만 삭제
+                textBox2.Clear();
+
+                // textBox1에서 마지막 연산자 이후 입력값 제거
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    int plusIndex = textBox1.Text.LastIndexOf("+");
+                    int minusIndex = textBox1.Text.LastIndexOf("-");
+                    int multiplyIndex = textBox1.Text.LastIndexOf("×");
+                    int divideIndex = textBox1.Text.LastIndexOf("÷");
+
+                    int lastOpIndex = Math.Max(Math.Max(plusIndex, minusIndex), Math.Max(multiplyIndex, divideIndex));
+
+                    if (lastOpIndex >= 0)
+                    {
+                        textBox1.Text = textBox1.Text.Substring(0, lastOpIndex + 2);
+                    }
+                    else
+                    {
+                        textBox1.Clear();
+
+                    }
+                }
             }
         }
     }
+}

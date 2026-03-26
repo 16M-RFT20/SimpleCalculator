@@ -89,6 +89,7 @@
             CE.TabIndex = 3;
             CE.Text = "CE";
             CE.UseVisualStyleBackColor = true;
+            CE.Click += CE_Click;
             // 
             // C
             // 
