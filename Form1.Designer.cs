@@ -120,6 +120,7 @@
             divide.TabIndex = 6;
             divide.Text = "÷";
             divide.UseVisualStyleBackColor = true;
+            divide.Click += divide_Click;
             // 
             // button７
             // 
@@ -165,8 +166,9 @@
             multiply.Name = "multiply";
             multiply.Size = new Size(80, 44);
             multiply.TabIndex = 10;
-            multiply.Text = "x";
+            multiply.Text = "×";
             multiply.UseVisualStyleBackColor = true;
+            multiply.Click += multiply_Click;
             // 
             // button4
             // 
@@ -214,6 +216,7 @@
             minus.TabIndex = 14;
             minus.Text = "-";
             minus.UseVisualStyleBackColor = true;
+            minus.Click += minus_Click;
             // 
             // button1
             // 

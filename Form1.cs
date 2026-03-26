@@ -134,7 +134,7 @@ namespace SimpleCalculator
         // + 버튼 클릭 이벤트 핸들러
         private void plus_Click(object sender, EventArgs e)
         {
-            
+
             n1 = int.Parse(textBox1.Text);
             textBox1.Text = textBox1.Text + " + ";
             operation = "+";
@@ -142,20 +142,55 @@ namespace SimpleCalculator
             afterOperator = true;
         }
 
+        // - 버튼 클릭 이벤트 핸들러
+        private void minus_Click(object sender, EventArgs e)
+        {
+            n1 = int.Parse(textBox2.Text);
+            textBox1.Text = textBox1.Text + " - ";
+            operation = "-";
+            afterOperator = true;
+        }
+
+        // × 버튼 클릭 이벤트 핸들러
+        private void multiply_Click(object sender, EventArgs e)
+        {
+            n1 = int.Parse(textBox2.Text);
+            textBox1.Text = textBox1.Text + " × ";
+            operation = "*";
+            afterOperator = true;
+        }
+
+        // ÷ 버튼 클릭 이벤트 핸들러
+        private void divide_Click(object sender, EventArgs e)
+        {
+            n1 = int.Parse(textBox2.Text);
+            textBox1.Text = textBox1.Text + " ÷ ";
+            operation = "/";
+            afterOperator = true;
+        }
+
         // = 버튼 클릭 이벤트 핸들러
         private void equal_Click(object sender, EventArgs e)
         {
-            string[] parts = textBox1.Text.Split('+');
+            string[] parts = textBox1.Text.Split(new char[] { '+', '-', '×', '÷' });
             n2 = int.Parse(parts[1].Trim());
 
             int result = 0;
-            if (operation == "+")
-                result = n1 + n2;
+            switch (operation)
+            {
+                case "+": result = n1 + n2; break;
+                case "-": result = n1 - n2; break;
+                case "*": result = n1 * n2; break;
+                case "/":
+                    if (n2 != 0) result = n1 / n2;
+                    else MessageBox.Show("0으로 나눌 수 없습니다!");
+                    break;
+            }
 
-            textBox1.Text = textBox1.Text + " = " + result.ToString();
+                    textBox1.Text = textBox1.Text + " = " + result.ToString();
 
-            textBox2.Clear();
-            textBox2.Text = result.ToString();
+                    textBox2.Clear();
+                    textBox2.Text = result.ToString();
+            }
         }
     }
-}
