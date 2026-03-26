@@ -111,6 +111,7 @@
             del.TabIndex = 5;
             del.Text = "del";
             del.UseVisualStyleBackColor = true;
+            del.Click += del_Click;
             // 
             // divide
             // 

@@ -210,7 +210,8 @@ namespace SimpleCalculator
         // CE 버튼 클릭 이벤트 핸들러
         private void CE_Click(object sender, EventArgs e)
         {
-            if (afterEqual) // = 이후라면 전체 초기화
+            // = 이후라면 전체 초기화
+            if (afterEqual)
             {
                 textBox1.Clear();
                 textBox2.Clear();
@@ -219,31 +220,35 @@ namespace SimpleCalculator
                 operation = string.Empty;
                 afterOperator = false;
                 afterEqual = false;
+                return;
             }
-            else
+
+            // 사칙연산 직후라면 CE는 동작하지 않음
+            if (afterOperator)
             {
-                // 일반적인 CE 동작: 현재 입력값만 삭제
-                textBox2.Clear();
+                return; // 아무 동작도 하지 않음
+            }
 
-                // textBox1에서 마지막 연산자 이후 입력값 제거
-                if (!string.IsNullOrEmpty(textBox1.Text))
+            // 일반적인 CE 동작: 현재 입력값만 삭제
+            textBox2.Clear();
+
+            // textBox1에서 마지막 연산자 이후 입력값 제거
+            if (!string.IsNullOrEmpty(textBox1.Text))
+            {
+                int plusIndex = textBox1.Text.LastIndexOf("+");
+                int minusIndex = textBox1.Text.LastIndexOf("-");
+                int multiplyIndex = textBox1.Text.LastIndexOf("×");
+                int divideIndex = textBox1.Text.LastIndexOf("÷");
+
+                int lastOpIndex = Math.Max(Math.Max(plusIndex, minusIndex), Math.Max(multiplyIndex, divideIndex));
+
+                if (lastOpIndex >= 0)
                 {
-                    int plusIndex = textBox1.Text.LastIndexOf("+");
-                    int minusIndex = textBox1.Text.LastIndexOf("-");
-                    int multiplyIndex = textBox1.Text.LastIndexOf("×");
-                    int divideIndex = textBox1.Text.LastIndexOf("÷");
-
-                    int lastOpIndex = Math.Max(Math.Max(plusIndex, minusIndex), Math.Max(multiplyIndex, divideIndex));
-
-                    if (lastOpIndex >= 0)
-                    {
-                        textBox1.Text = textBox1.Text.Substring(0, lastOpIndex + 2);
-                    }
-                    else
-                    {
-                        textBox1.Clear();
-
-                    }
+                    textBox1.Text = textBox1.Text.Substring(0, lastOpIndex + 2);
+                }
+                else
+                {
+                    textBox1.Clear();
                 }
             }
         }
@@ -263,6 +268,56 @@ namespace SimpleCalculator
             // 상태 플래그 초기화
             afterOperator = false;
             afterEqual = false;
+        }
+
+        // DEL 버튼 클릭 이벤트 핸들러 (구현 필요)
+        private void del_Click(object sender, EventArgs e)
+        {
+            // = 이후라면 전체 초기화 (C 버튼처럼 동작)
+            if (afterEqual)
+            {
+                textBox1.Clear();
+                textBox2.Clear();
+                n1 = 0;
+                n2 = 0;
+                operation = string.Empty;
+                afterOperator = false;
+                afterEqual = false;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox2.Text))
+                return;
+
+            // 마지막 연산자 위치 찾기
+            int plusIndex = textBox1.Text.LastIndexOf("+");
+            int minusIndex = textBox1.Text.LastIndexOf("-");
+            int multiplyIndex = textBox1.Text.LastIndexOf("×");
+            int divideIndex = textBox1.Text.LastIndexOf("÷");
+
+            int lastOpIndex = Math.Max(Math.Max(plusIndex, minusIndex), Math.Max(multiplyIndex, divideIndex));
+
+            if (lastOpIndex >= 0)
+            {
+                // 연산자 이후 입력된 숫자가 있는지 확인
+                if (textBox1.Text.Length > lastOpIndex + 2)
+                {
+                    // 연산자 이후 숫자만 지우기
+                    textBox2.Text = textBox2.Text.Substring(0, textBox2.Text.Length - 1);
+                    textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+                }
+                else
+                {
+                    // 연산자 이후 숫자가 없으면 아무 동작도 하지 않음
+                    return;
+                }
+            }
+            else
+            {
+                // 연산자 이전이라면 textBox1과 textBox2 모두 마지막 글자 삭제
+                textBox2.Text = textBox2.Text.Substring(0, textBox2.Text.Length - 1);
+                textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+            }
         }
     }
 }
