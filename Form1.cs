@@ -191,13 +191,21 @@ namespace SimpleCalculator
                     break;
             }
 
-            textBox1.Text = n1.ToString() + " " + operation + " " + n2.ToString() + " = " + result.ToString();
+            // 출력용 기호 변환
+            string displayOp = operation;
+            if (operation == "*") displayOp = "×";
+            if (operation == "/") displayOp = "÷";
+
+            // textBox1에는 전체 과정 표시 (변환된 기호 사용)
+            textBox1.Text = n1.ToString() + " " + displayOp + " " + n2.ToString() + " = " + result.ToString();
+
+            // textBox2에는 최종 결과만 표시
             textBox2.Clear();
             textBox2.Text = result.ToString();
 
             afterEqual = true; // = 버튼 눌린 상태 기록
-
         }
+
 
         // CE 버튼 클릭 이벤트 핸들러
         private void CE_Click(object sender, EventArgs e)
@@ -238,6 +246,23 @@ namespace SimpleCalculator
                     }
                 }
             }
+        }
+
+        // C 버튼 클릭 이벤트 핸들러
+        private void C_Click(object sender, EventArgs e)
+        {
+            // 모든 입력창 초기화
+            textBox1.Clear();
+            textBox2.Clear();
+
+            // 내부 변수 초기화
+            n1 = 0;
+            n2 = 0;
+            operation = string.Empty;
+
+            // 상태 플래그 초기화
+            afterOperator = false;
+            afterEqual = false;
         }
     }
 }

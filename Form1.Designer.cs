@@ -100,6 +100,7 @@
             C.TabIndex = 4;
             C.Text = "C";
             C.UseVisualStyleBackColor = true;
+            C.Click += C_Click;
             // 
             // del
             // 
